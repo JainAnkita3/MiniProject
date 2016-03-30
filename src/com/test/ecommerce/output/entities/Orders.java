@@ -5,9 +5,12 @@ package com.test.ecommerce.output.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -22,8 +25,7 @@ import javax.persistence.TemporalType;
 public class Orders implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int orderId;
-	private int customerId;
+	private Customer customerId;
 	private Date orderDate;
 	private String quantityOrdered;
 	private BigDecimal CProdPrice;
@@ -31,23 +33,34 @@ public class Orders implements java.io.Serializable {
 	private String status;
 	private String trackingNum;
 
+	/*
+	 * Changes Done for One to One mapping for Primary Key OrderId
+	 */
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	private Cart cartOrderId;
+
 	@Id
-
-	@Column(name = "ORDER_ID", unique = true, nullable = false)
-	public int getOrderId() {
-		return this.orderId;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ORDER_ID", nullable = false)
+	public Cart getOrderId() {
+		return cartOrderId;
 	}
 
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setOrderId(Cart orderId) {
+		this.cartOrderId = orderId;
 	}
 
-	@Column(name = "CUSTOMER_ID", nullable = false)
-	public int getCustomerId() {
+	/*
+	 * Changes Done for One to One mapping for Foreign Key CustomerID
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
+	public Customer getCustomerId() {
 		return this.customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Customer customerId) {
 		this.customerId = customerId;
 	}
 
@@ -106,18 +119,15 @@ public class Orders implements java.io.Serializable {
 		this.trackingNum = trackingNum;
 	}
 
-	// TODO
-	// Needs to verify mapping
-	@OneToOne
-	@PrimaryKeyJoinColumn
-	private Cart cart;
-
 	public Orders() {
 	}
 
-	public Orders(int orderId, int customerId, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
+	/*
+	 * Modified Constructors to support mapping
+	 */
+	public Orders(Cart orderId, Customer customerId, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
 			BigDecimal totalAmount) {
-		this.orderId = orderId;
+		this.cartOrderId = orderId;
 		this.customerId = customerId;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
@@ -125,9 +135,9 @@ public class Orders implements java.io.Serializable {
 		this.totalAmount = totalAmount;
 	}
 
-	public Orders(int orderId, int customerId, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
+	public Orders(Cart orderId, Customer customerId, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
 			BigDecimal totalAmount, String status, String trackingNum) {
-		this.orderId = orderId;
+		this.cartOrderId = orderId;
 		this.customerId = customerId;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;

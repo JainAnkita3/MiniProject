@@ -5,9 +5,13 @@ package com.test.ecommerce.output.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +25,7 @@ public class Carddetails implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String cardNumber;
-	private int customerId;
+	private Customer customerId;
 	private String pin;
 	private Date cardExpiryDtm;
 	private String cardType;
@@ -31,7 +35,10 @@ public class Carddetails implements java.io.Serializable {
 	public Carddetails() {
 	}
 
-	public Carddetails(String cardNumber, int customerId, Date cardExpiryDtm, String cardType, BigDecimal amount) {
+	/*
+	 * Modified Constructors to support mapping
+	 */
+	public Carddetails(String cardNumber, Customer customerId, Date cardExpiryDtm, String cardType, BigDecimal amount) {
 		this.cardNumber = cardNumber;
 		this.customerId = customerId;
 		this.cardExpiryDtm = cardExpiryDtm;
@@ -39,7 +46,7 @@ public class Carddetails implements java.io.Serializable {
 		this.amount = amount;
 	}
 
-	public Carddetails(String cardNumber, int customerId, String pin, Date cardExpiryDtm, String cardType,
+	public Carddetails(String cardNumber, Customer customerId, String pin, Date cardExpiryDtm, String cardType,
 			String bankName, BigDecimal amount) {
 		this.cardNumber = cardNumber;
 		this.customerId = customerId;
@@ -61,12 +68,16 @@ public class Carddetails implements java.io.Serializable {
 		this.cardNumber = cardNumber;
 	}
 
-	@Column(name = "CUSTOMER_ID", nullable = false)
-	public int getCustomerId() {
+	/*
+	 * Added to Support One to One mapping based on CustomerId
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
+	public Customer getCustomerId() {
 		return this.customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Customer customerId) {
 		this.customerId = customerId;
 	}
 

@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="/Users/rinkeshshah/Documents/Ankee/workspace/hibernate-search-5.5.2.Final/dist/lib/required extjars/javassist-3.20.0-GA.jar"/>
 	<classpathentry kind="lib" path="/Users/rinkeshshah/Documents/Ankee/workspace/hibernate-search-5.5.2.Final/dist/lib/required extjars/jboss-logging-3.3.0.Final.jar"/>
 	<classpathentry kind="lib" path="/Users/rinkeshshah/Documents/Ankee/workspace/hibernate-search-5.5.2.Final/dist/lib/required/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/Users/rinkeshshah/Documents/Ankee/workspace/extjars/apache-logging-log4j.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

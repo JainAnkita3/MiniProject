@@ -1,13 +1,17 @@
 package com.test.ecommerce.output.entities;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 // default package
 // Generated Mar 23, 2016 4:48:05 PM by Hibernate Tools 4.3.1.Final
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -19,7 +23,11 @@ public class Addresses implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer addressId;
-	private int customerId;
+	/*
+	 *  For building Foreign Key concept and Many to One relationship between
+	 *  Customer & Addresses.
+	 */
+	private Customer customer;
 	private String streetName;
 	private String city;
 	private String apt;
@@ -28,12 +36,17 @@ public class Addresses implements java.io.Serializable {
 	public Addresses() {
 	}
 
-	public Addresses(int customerId) {
-		this.customerId = customerId;
+	 /*
+	  * Constructor modified for Many to One mapping, made Customer Object as an input argument
+	  */
+	public Addresses(int addressId, Customer customer) {
+		this.addressId = addressId;
+		this.customer = customer;
 	}
 
-	public Addresses(int customerId, String streetName, String city, String apt, String addressType) {
-		this.customerId = customerId;
+	public Addresses(Customer customer, int addressId, String streetName, String city, String apt, String addressType) {
+		this.customer = customer;
+		this.addressId = addressId;
 		this.streetName = streetName;
 		this.city = city;
 		this.apt = apt;
@@ -42,7 +55,6 @@ public class Addresses implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ADDRESS_ID", unique = true, nullable = false)
 	public Integer getAddressId() {
 		return this.addressId;
@@ -52,13 +64,17 @@ public class Addresses implements java.io.Serializable {
 		this.addressId = addressId;
 	}
 
-	@Column(name = "CUSTOMER_ID", nullable = false)
-	public int getCustomerId() {
-		return this.customerId;
+	 /*
+	  * Annotation used and changes done to support Many to One mapping
+	  */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
+	public Customer getCustomer() {
+		return this.customer;
 	}
 
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	@Column(name = "STREET_NAME", length = 20)

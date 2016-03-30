@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,15 +24,14 @@ public class Cart implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer orderId;
-	private int customerId;
-	private int productId;
+	private Customer customerId;
+	private Product productId;
 	private String quantityOrdered;
 	private BigDecimal CProdPrice;
 	private BigDecimal totalAmount;
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ORDER_ID", unique = true, nullable = false)
 	public Integer getOrderId() {
 		return this.orderId;
@@ -41,21 +41,29 @@ public class Cart implements java.io.Serializable {
 		this.orderId = orderId;
 	}
 
-	@Column(name = "CUSTOMER_ID", nullable = false)
-	public int getCustomerId() {
-		return this.customerId;
+	/*
+	 * Added to Support One to One mapping based on CustomerId
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
+	public Customer getCustomerId() {
+		return customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Customer customerId) {
 		this.customerId = customerId;
 	}
 
-	@Column(name = "PRODUCT_ID", nullable = false)
-	public int getProductId() {
-		return this.productId;
+	/*
+	 * Added to Support One to One mapping based on ProductId
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "PRODUCT_ID", nullable = false)
+	public Product getProductId() {
+		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setproductId(Product productId) {
 		this.productId = productId;
 	}
 
@@ -86,15 +94,21 @@ public class Cart implements java.io.Serializable {
 		this.totalAmount = totalAmount;
 	}
 
-	// TODO
-	// Needs to verify this one to one mapping
+	// TODO need to check the use of orders variable otherwise remove
+	/*
+	 * Added to Support One to One mapping based on OrderID
+	 */
 	@OneToOne(mappedBy = "cart", cascade = CascadeType.ALL)
 	private Orders orders;
 
 	public Cart() {
 	}
 
-	public Cart(int customerId, int productId, String quantityOrdered, BigDecimal CProdPrice, BigDecimal totalAmount) {
+	/*
+	 * Modified Constructors to support mapping
+	 */
+	public Cart(Customer customerId, Product productId, String quantityOrdered, BigDecimal CProdPrice,
+			BigDecimal totalAmount) {
 		this.customerId = customerId;
 		this.productId = productId;
 		this.quantityOrdered = quantityOrdered;
