@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS CUSTOMER  -- Customer and Address has one to many rel
      FIRST_NAME            VARCHAR(20) NOT NULL,
      LAST_NAME             VARCHAR(20),
      PASSWORD              CHAR(4) NOT NULL,
-     ADDRESS               VARCHAR(20),
-     EMAIL                 VARCHAR(55) NOT NULL,  -- Email verification needs to send to Customer for first time login OR Password reset link
+     ADDRESS               VARCHAR(220),
+     EMAIL                 VARCHAR(55) NOT NULL UNIQUE,  -- Email verification needs to send to Customer for first time login OR Password reset link
      PH_NUMBER             INT,
      PRIMARY KEY           (CUSTOMER_ID)
   );
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS CART  -- primary key & Foreign Key (One to One with O
   
 CREATE TABLE IF NOT EXISTS ORDERS  -- Just for History mainteance for later use i.e. after placing order, Tracking purpose
   (
-     ORDER_ID               INT NOT NULL,
+     ORDER_ID               INT NOT NULL UNIQUE,
      CUSTOMER_ID            INT NOT NULL,
      ORDER_DATE             TIMESTAMP(6) NOT NULL,
      QUANTITY_ORDERED		VARCHAR(20) NOT NULL,    -- Just for the history maintinance to show to customer , Insert it from Java Code
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS ADDRESSES  -- Customer and Address has one to many re
 CREATE TABLE IF NOT EXISTS CARDDETAILS   -- Payment Mode --> COD, CreditCard, DebitCard, InternetBanking
   (
      CUSTOMER_ID            INT NOT NULL,
-     CARD_NUMBER            VARCHAR(20) NOT NULL,
+     CARD_NUMBER            VARCHAR(20) NOT NULL UNIQUE,
      PIN                    CHAR(4),
      CARD_EXPIRY_DTM        TIMESTAMP(6) NOT NULL,
      CARD_TYPE              VARCHAR(20) NOT NULL, 

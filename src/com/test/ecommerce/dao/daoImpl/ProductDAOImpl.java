@@ -23,7 +23,7 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 	private Product item = new Product();
 
 	public ProductDAOImpl() {
-		logger.debug("Product Construtor");
+		System.out.println("ProductDAOImpl Construtor");
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 			// setProductDetails("Sugar", "", "5.99", "20");
 			// setProductDetails("Tea", "", "4.99", "30");
 			getSession().save(item);
-			logger.debug("save successful");
+			System.out.println("Records Inserted successfully : " + item.getProductId());
 		} catch (HibernateException e) {
 			logger.error("Caught Exception" + e);
 			txnRollback();
@@ -55,11 +55,11 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 	 */
 	public void getProduct() {
 
-		EcommerceConstants.TRANSACTION = getTransaction();
-		Query hqlQuery = EcommerceConstants.SESSION.createQuery("from Item");
+		createTransaction(getSession());
+		Query hqlQuery = getSession().createQuery("from Item");
 		List<Product> items = hqlQuery.list();
 		for (Product item : items) {
-			logger.debug("Product Id : '" + item.getProductId() + "', Product Name : '" + item.getProductName()
+			System.out.println("Product Id : '" + item.getProductId() + "', Product Name : '" + item.getProductName()
 					+ "', Price : '" + item.getSellingPrice() + "', Manufacturer : '" + item.getManufacturer());
 		}
 		closeSession();
@@ -68,23 +68,20 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 	/**
 	 * This method will update the records of table
 	 */
-	public void updateProduct() {
+	public void updateProduct(Product productId) {
 
 		try {
-			EcommerceConstants.TRANSACTION = getTransaction();
+			createTransaction(getSession());
 
-			idList = doSqlQuery("Milk");
-			for (Integer id : idList) {
-				item = EcommerceConstants.SESSION.get(Product.class, id);
-				item.setSellingPrice(new BigDecimal("7.99"));
-				EcommerceConstants.SESSION.saveOrUpdate(item);
-			}
-			EcommerceConstants.TRANSACTION.commit();
+			item = getSession().get(Product.class, productId);
+			item.setSellingPrice(new BigDecimal("7.99"));
+			getSession().saveOrUpdate(item);
 
-			logger.debug("Price Updated Succesfully, now it : '" + item.getSellingPrice() + "$'");
+			System.out.println("Price Updated Succesfully, now it : '" + item.getSellingPrice() + "$'");
+
 		} catch (HibernateException e) {
-			logger.debug("Caught Exception");
-			EcommerceConstants.TRANSACTION.rollback();
+			System.out.println("Caught Exception");
+			txnRollback();
 			e.printStackTrace();
 		} finally {
 			closeSession();
@@ -104,7 +101,7 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 		for (Integer id : idList) {
 			Product item = getSession().load(Product.class, id);
 			getSession().delete(item);
-			logger.debug("Record Deleted Succesfully");
+			System.out.println("Record Deleted Succesfully");
 		}
 		closeSession();
 	}
@@ -119,8 +116,8 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 	private List<Integer> doSqlQuery(String productName) {
 
 		String sql = "SELECT PRODUCT_ID FROM PRODUCT WHERE PRODUCT_NAME = '%productName%'";
-		logger.debug("   ********* " + sql);
-		SQLQuery sqlQuery = EcommerceConstants.SESSION.createSQLQuery(sql);
+		System.out.println("   ********* " + sql);
+		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
 		List<Integer> idList = sqlQuery.list();
 		return idList;
 
@@ -137,14 +134,12 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 	 */
 	private Product setProductDetails(String ProdName, String Mfg, String SellingPrice, String Stock) {
 
-		logger.debug(" Adding Items in Product Table");
+		System.out.println(" Adding Items in Product Table");
 
 		item.setProductName(ProdName);
 		item.setManufacturer(Mfg);
 		item.setSellingPrice(new BigDecimal(SellingPrice));
 		item.setStock(Stock);
-
-		logger.debug("Records Inserted successfully" + itemId);
 		return item;
 
 	}

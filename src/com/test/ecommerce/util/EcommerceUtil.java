@@ -28,16 +28,15 @@ public class EcommerceUtil {
 	 */
 	public synchronized static Session getSession() {
 		if (SESSION == null || !SESSION.isOpen()) {
-			logger.info("No Session is open, so creating the new one");
+			System.out.println("No Session is open, so creating the new one");
 			try {
 				SESSIONFACTORY = new Configuration().configure(CFGFILE).buildSessionFactory();
 				SESSION = createSession(SESSIONFACTORY);
-				logger.debug("Session created");
 			} catch (Exception e) {
 				System.err.println("Session creation failed." + e);
 				e.printStackTrace();
 			}
-			logger.debug("Session created successfully");
+			//System.out.println("Session created successfully");
 
 		}
 
@@ -52,18 +51,18 @@ public class EcommerceUtil {
 	 */
 	public synchronized static Transaction getTransaction() {
 		if (SESSION == null) {
-			logger.debug("No Session is open, so creating the new one");
+			System.out.println("No Session is open, so creating the new one");
 			try {
 				SESSIONFACTORY = new Configuration().configure(CFGFILE).buildSessionFactory();
 				SESSION = createSession(SESSIONFACTORY);
 				TRANSACTION = SESSION.beginTransaction();
-				logger.debug("Txn created");
+				System.out.println("Txn created");
 			} catch (Exception e) {
 				System.err.println("Transaction creation failed." + e);
 				e.printStackTrace();
 			}
 		}
-		logger.debug("Transaction created successfully");
+		System.out.println("Transaction created successfully");
 
 		return TRANSACTION;
 	}
@@ -76,7 +75,7 @@ public class EcommerceUtil {
 	 */
 	private static Session createSession(SessionFactory sFactory) {
 		SESSION = SESSIONFACTORY.openSession();
-		logger.debug("Session created successfully");
+		System.out.println("**Session created successfully**");
 		return SESSION;
 
 	}
@@ -89,7 +88,7 @@ public class EcommerceUtil {
 	 */
 	public static Transaction createTransaction(Session session) {
 		TRANSACTION = session.beginTransaction();
-		logger.debug("Txn created successfully");
+		System.out.println("Txn created successfully");
 		return TRANSACTION;
 
 	}
@@ -99,7 +98,7 @@ public class EcommerceUtil {
 	 * open.
 	 */
 	public static void closeSession() {
-		logger.debug("Session Closing");
+		System.out.println("**** Closing Session ****");
 		if (TRANSACTION != null) {
 			TRANSACTION.commit();
 		}
@@ -112,7 +111,7 @@ public class EcommerceUtil {
 	 * This method will rollback the transaction
 	 */
 	public static void txnRollback() {
-		logger.debug("Transaction Rollback");
+		System.out.println("Transaction Rollback");
 		TRANSACTION.rollback();
 	}
 

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS CUSTOMER  -- Customer and Address has one to many rel
      FIRST_NAME            VARCHAR(20) NOT NULL,
      LAST_NAME             VARCHAR(20),
      PASSWORD              CHAR(4) NOT NULL,
-     ADDRESS               VARCHAR(20),
+     ADDRESS               VARCHAR(220),
      EMAIL                 VARCHAR(55) NOT NULL,  -- Email verification needs to send to Customer for first time login OR Password reset link
      PH_NUMBER             INT,
      PRIMARY KEY           (CUSTOMER_ID)
