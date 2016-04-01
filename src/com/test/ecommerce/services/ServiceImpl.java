@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.test.ecommerce.dao.daoImpl.CartDAOImpl;
 import com.test.ecommerce.dao.daoImpl.ProductDAOImpl;
 import com.test.ecommerce.output.entities.Addresses;
 import com.test.ecommerce.output.entities.Carddetails;
@@ -36,16 +37,20 @@ public class ServiceImpl extends EcommerceUtil {
 		customer.setAddresses(addrsSet);
 
 		Product product1 = new Product("Milk", new BigDecimal("3.99"), "50");
-
-		Cart cart = new Cart(customer, "1", product1.getSellingPrice(), new BigDecimal("3.99"));
+		Product product2 = new Product("Water", new BigDecimal("2.99"), "50");
 
 		Carddetails cd = new Carddetails();
 
-		Set<Product> productSet = new HashSet<Product>();
+		CartDAOImpl cartDao = new CartDAOImpl();
+		BigDecimal totalCartProdPrice = cartDao.getCartProdTotalPrice(product1.getSellingPrice(), "2");
+		System.out.println("fjh : " + totalCartProdPrice);
 
-		productSet.add(product1);
+		// TODO Future use for total amount payable by customer to put in Cart
+		// BigDecimal totalCartProdPrice;
+		Cart cart = new Cart(customer, product1, "1", totalCartProdPrice, totalCartProdPrice);
+		cart = new Cart(customer, product2, "5", totalCartProdPrice, totalCartProdPrice);
+
 		cart.setCustomer(customer);
-		cart.setProduct(productSet);
 
 		SESSION = getSession();
 		SESSION.save(customer);
@@ -56,11 +61,12 @@ public class ServiceImpl extends EcommerceUtil {
 		SESSION.save(product1);
 		SESSION.save(cart);
 
+		// Txn commit & Closing session
 		closeSession();
 
 		ProductDAOImpl p = new ProductDAOImpl();
 
-		p.addProduct();
+		// p.addProduct();
 
 		// Orders order = new Orders(101, 1001, new java.util.Date(), "5", new
 		// BigDecimal("2.99"), new BigDecimal("14.95"),

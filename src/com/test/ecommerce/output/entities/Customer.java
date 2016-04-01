@@ -148,6 +148,7 @@ public class Customer implements java.io.Serializable {
 		this.orders = orders;
 	}
 
+	// TODO do we really need this? Will it get the whole cart of customer?
 	/*
 	 * Added to support One to One mapping with Cart
 	 */

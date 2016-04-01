@@ -31,20 +31,38 @@ public class Cart implements java.io.Serializable {
 	private String quantityOrdered;
 	private BigDecimal CProdPrice;
 	private BigDecimal totalAmount;
+	private int productId;
 
 	/*
 	 * Building One-to-One relationship with Customer, Orders
 	 * 
 	 */
 	private Customer customer;
+	private Product product;
+
 	// TODO need to verify if needs some changes for Orders
 	private Orders orders;
 
 	/*
 	 * Building One-to-Many relationship with Product and Carddetails
 	 */
-	private Set<Product> product;
+	// private Set<Product> product;
 	private Set<Carddetails> carddetails;
+
+	public Cart() {
+	}
+
+	/*
+	 * Modified Constructors to support mapping
+	 */
+	public Cart(Customer customer, Product product, String quantityOrdered, BigDecimal CProdPrice,
+			BigDecimal totalAmount) {
+		this.customer = customer;
+		this.product = product;
+		this.quantityOrdered = quantityOrdered;
+		this.CProdPrice = CProdPrice;
+		this.totalAmount = totalAmount;
+	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -70,6 +88,19 @@ public class Cart implements java.io.Serializable {
 		this.customer = customer;
 	}
 
+	/*
+	 * Added to Support One to One mapping with Customer
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "Product_ID", nullable = false)
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	// TODO c_prod_price should come from product SELLING_PRICE table
 	// @OneToOne(cascade = CascadeType.ALL)
 	@Column(name = "C_PROD_PRICE", nullable = false)
@@ -84,14 +115,24 @@ public class Cart implements java.io.Serializable {
 	/*
 	 * Added to support One to Many mapping with Product and Carddetails
 	 */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
-	public Set<Product> getProduct() {
-		return this.product;
+	/*
+	 * @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart") public Set<Product>
+	 * getProduct() { return this.product; }
+	 * 
+	 * public void setProduct(Set<Product> product) { this.product = product; }
+	 */
+
+	// @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
+	// @JoinColumn(name = "PRODUCT_ID")
+
+	/*@Column(name = "PRODUCT_ID")
+	public int getProductId() {
+		return this.productId;
 	}
 
-	public void setProduct(Set<Product> product) {
-		this.product = product;
-	}
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}*/
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cart")
 	public Set<Carddetails> getCarddetails() {
@@ -117,19 +158,6 @@ public class Cart implements java.io.Serializable {
 	}
 
 	public void setTotalAmount(BigDecimal totalAmount) {
-		this.totalAmount = totalAmount;
-	}
-
-	public Cart() {
-	}
-
-	/*
-	 * Modified Constructors to support mapping
-	 */
-	public Cart(Customer customer, String quantityOrdered, BigDecimal CProdPrice, BigDecimal totalAmount) {
-		this.customer = customer;
-		this.quantityOrdered = quantityOrdered;
-		this.CProdPrice = CProdPrice;
 		this.totalAmount = totalAmount;
 	}
 

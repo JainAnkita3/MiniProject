@@ -38,6 +38,7 @@ public class Orders implements java.io.Serializable {
 	private String status;
 	private String trackingNum;
 	private int orderedCartId;
+	private Cart orderId;
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -66,7 +67,8 @@ public class Orders implements java.io.Serializable {
 	}
 
 	/*
-	 * Annotation used and changes done to support Many-to-One mapping with Customer
+	 * Annotation used and changes done to support Many-to-One mapping with
+	 * Customer
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
@@ -141,7 +143,7 @@ public class Orders implements java.io.Serializable {
 	 */
 	public Orders(Cart orderId, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
 			BigDecimal totalAmount, int orderedCartId) {
-		this.cartOrderId = orderId;
+		this.orderId = orderId;
 		this.customer = customer;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
@@ -152,7 +154,7 @@ public class Orders implements java.io.Serializable {
 
 	public Orders(Cart orderId, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
 			BigDecimal totalAmount, String status, String trackingNum, int orderedCartId) {
-		this.cartOrderId = orderId;
+		this.orderId = orderId;
 		this.customer = customer;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
