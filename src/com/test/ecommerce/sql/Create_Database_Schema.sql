@@ -8,13 +8,12 @@ CREATE TABLE IF NOT EXISTS PRODUCT (
 );
 
 
-CREATE TABLE IF NOT EXISTS CUSTOMER  -- Customer and Address has one to many relationship
+CREATE TABLE IF NOT EXISTS CUSTOMER  -- Has one to many mapping with Addresses, Product, Carddetails, Orders and One to One with Cart.
   (
      CUSTOMER_ID           INT NOT NULL AUTO_INCREMENT UNIQUE,
      FIRST_NAME            VARCHAR(20) NOT NULL,
      LAST_NAME             VARCHAR(20),
      PASSWORD              CHAR(4) NOT NULL,
-     ADDRESS               VARCHAR(220),
      EMAIL                 VARCHAR(55) NOT NULL UNIQUE,  -- Email verification needs to send to Customer for first time login OR Password reset link
      PH_NUMBER             INT,
      PRIMARY KEY           (CUSTOMER_ID)
@@ -37,7 +36,8 @@ CREATE TABLE IF NOT EXISTS CART  -- primary key & Foreign Key (One to One with O
   
 CREATE TABLE IF NOT EXISTS ORDERS  -- Just for History mainteance for later use i.e. after placing order, Tracking purpose
   (
-     ORDER_ID               INT NOT NULL UNIQUE,
+     ORDERED_CART_ID        INT NOT NULL AUTO_INCREMENT UNIQUE,
+     ORDER_ID               INT NOT NULL,
      CUSTOMER_ID            INT NOT NULL,
      ORDER_DATE             TIMESTAMP(6) NOT NULL,
      QUANTITY_ORDERED		VARCHAR(20) NOT NULL,    -- Just for the history maintinance to show to customer , Insert it from Java Code
@@ -46,11 +46,10 @@ CREATE TABLE IF NOT EXISTS ORDERS  -- Just for History mainteance for later use 
      STATUS                 VARCHAR(20),             -- Need to insert from JAVA code.
      TRACKING_NUM           VARCHAR(32),             -- Need to insert from JAVA code.
      CHECK (STATUS IN ('SHIPPED','PROCESS', 'DELIVERED')),
-     PRIMARY KEY            (ORDER_ID),
+     PRIMARY KEY            (ORDERED_CART_ID),
      FOREIGN KEY            (CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID) ON DELETE CASCADE,
      FOREIGN KEY            (ORDER_ID) REFERENCES CART(ORDER_ID) ON DELETE CASCADE
   );
-
 
 
 CREATE TABLE IF NOT EXISTS ADDRESSES  -- Customer and Address has one to many relationship
@@ -70,6 +69,7 @@ CREATE TABLE IF NOT EXISTS ADDRESSES  -- Customer and Address has one to many re
 CREATE TABLE IF NOT EXISTS CARDDETAILS   -- Payment Mode --> COD, CreditCard, DebitCard, InternetBanking
   (
      CUSTOMER_ID            INT NOT NULL,
+     ORDER_ID               INT NOT NULL,
      CARD_NUMBER            VARCHAR(20) NOT NULL UNIQUE,
      PIN                    CHAR(4),
      CARD_EXPIRY_DTM        TIMESTAMP(6) NOT NULL,
@@ -78,8 +78,10 @@ CREATE TABLE IF NOT EXISTS CARDDETAILS   -- Payment Mode --> COD, CreditCard, De
      BANK_NAME              VARCHAR(20),
      AMOUNT                 NUMERIC(15,2) NOT NULL,   -- TOTAL PAYMENT DUE -->DIRECTLY FROM JAVA CODE -- Card.TOTAL_AMOUNT
      PRIMARY KEY            (CARD_NUMBER),
-     FOREIGN KEY            (CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID) ON DELETE CASCADE
+     FOREIGN KEY            (CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID) ON DELETE CASCADE,
+     FOREIGN KEY            (ORDER_ID) REFERENCES CART(ORDER_ID) ON DELETE CASCADE
   );
+
 
 CREATE TABLE IF NOT EXISTS CUSTOMERADDRESS  -- IF WE REALLY NEED IT, One to Many relationship
   (

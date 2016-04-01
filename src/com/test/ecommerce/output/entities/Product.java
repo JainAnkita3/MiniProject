@@ -1,14 +1,20 @@
 package com.test.ecommerce.output.entities;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 // default package
 // Generated Mar 23, 2016 4:48:05 PM by Hibernate Tools 4.3.1.Final
 
 import java.math.BigDecimal;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -24,6 +30,11 @@ public class Product implements java.io.Serializable {
 	private String manufacturer;
 	private BigDecimal sellingPrice;
 	private String stock;
+
+	/*
+	 * Many-to-One with Cart
+	 */
+	private Cart cart;
 
 	public Product() {
 	}
@@ -41,10 +52,13 @@ public class Product implements java.io.Serializable {
 		this.stock = stock;
 	}
 
+	/*
+	 * Annotation used and changes done to support Many to One mapping
+	 */
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
-	@Column(name = "PRODUCT_ID", unique = true, nullable = false)
+	//@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PRODUCT_ID", unique = true, nullable = false)
 	public Integer getProductId() {
 		return this.productId;
 	}
@@ -53,7 +67,7 @@ public class Product implements java.io.Serializable {
 		this.productId = productId;
 	}
 
-	@Column(name = "PRODUCT_NAME", nullable = false, length = 20)
+	@Column(name = "PRODUCT_NAME", unique = true, nullable = false, length = 20)
 	public String getProductName() {
 		return this.productName;
 	}
@@ -87,6 +101,18 @@ public class Product implements java.io.Serializable {
 
 	public void setStock(String stock) {
 		this.stock = stock;
+	}
+
+	/*
+	 * Added to support Many-to-One with Cart
+	 */
+	@ManyToOne(cascade = CascadeType.ALL)
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
 }

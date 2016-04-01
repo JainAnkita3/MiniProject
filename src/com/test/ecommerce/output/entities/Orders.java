@@ -1,5 +1,7 @@
 package com.test.ecommerce.output.entities;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 // default package
 // Generated Mar 23, 2016 4:48:05 PM by Hibernate Tools 4.3.1.Final
 
@@ -9,8 +11,11 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -25,43 +30,52 @@ import javax.persistence.TemporalType;
 public class Orders implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Customer customerId;
+	private Customer customer;
 	private Date orderDate;
 	private String quantityOrdered;
 	private BigDecimal CProdPrice;
 	private BigDecimal totalAmount;
 	private String status;
 	private String trackingNum;
+	private int orderedCartId;
+
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "ORDERED_CART_ID", unique = true, nullable = false)
+	public int getOrderedCartId() {
+		return orderedCartId;
+	}
+
+	public void setOrderedCartId(int orderedCartId) {
+		this.orderedCartId = orderedCartId;
+	}
 
 	/*
 	 * Changes Done for One to One mapping for Primary Key OrderId
 	 */
-	@OneToOne
-	@PrimaryKeyJoinColumn
-	private Cart cartOrderId;
+	private Cart cart;
 
-	@Id
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ORDER_ID", nullable = false)
-	public Cart getOrderId() {
-		return cartOrderId;
+	public Cart getCart() {
+		return cart;
 	}
 
-	public void setOrderId(Cart orderId) {
-		this.cartOrderId = orderId;
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 
 	/*
-	 * Changes Done for One to One mapping for Foreign Key CustomerID
+	 * Annotation used and changes done to support Many-to-One mapping with Customer
 	 */
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
-	public Customer getCustomerId() {
-		return this.customerId;
+	public Customer getCustomer() {
+		return this.customer;
 	}
 
-	public void setCustomerId(Customer customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -125,26 +139,28 @@ public class Orders implements java.io.Serializable {
 	/*
 	 * Modified Constructors to support mapping
 	 */
-	public Orders(Cart orderId, Customer customerId, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
-			BigDecimal totalAmount) {
+	public Orders(Cart orderId, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
+			BigDecimal totalAmount, int orderedCartId) {
 		this.cartOrderId = orderId;
-		this.customerId = customerId;
+		this.customer = customer;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
 		this.CProdPrice = CProdPrice;
 		this.totalAmount = totalAmount;
+		this.orderedCartId = orderedCartId;
 	}
 
-	public Orders(Cart orderId, Customer customerId, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
-			BigDecimal totalAmount, String status, String trackingNum) {
+	public Orders(Cart orderId, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
+			BigDecimal totalAmount, String status, String trackingNum, int orderedCartId) {
 		this.cartOrderId = orderId;
-		this.customerId = customerId;
+		this.customer = customer;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
 		this.CProdPrice = CProdPrice;
 		this.totalAmount = totalAmount;
 		this.status = status;
 		this.trackingNum = trackingNum;
+		this.orderedCartId = orderedCartId;
 	}
 
 }

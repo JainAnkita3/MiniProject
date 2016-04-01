@@ -15,5 +15,6 @@
 		<mapping class="com.test.ecommerce.output.entities.Orders" />
 		<mapping class="com.test.ecommerce.output.entities.Customer" />
 		<mapping class="com.test.ecommerce.output.entities.Addresses" />
+		<mapping class="com.test.ecommerce.output.entities.Carddetails" />
 	</session-factory>
 </hibernate-configuration>

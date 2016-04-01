@@ -24,8 +24,8 @@ public class Addresses implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer addressId;
 	/*
-	 *  For building Foreign Key concept and Many to One relationship between
-	 *  Customer & Addresses.
+	 * For building Foreign Key concept and Many to One relationship between
+	 * Customer & Addresses.
 	 */
 	private Customer customer;
 	private String streetName;
@@ -36,9 +36,10 @@ public class Addresses implements java.io.Serializable {
 	public Addresses() {
 	}
 
-	 /*
-	  * Constructor modified for Many to One mapping, made Customer Object as an input argument
-	  */
+	/*
+	 * Constructor modified for Many to One mapping, made Customer Object as an
+	 * input argument
+	 */
 	public Addresses(int addressId, Customer customer) {
 		this.addressId = addressId;
 		this.customer = customer;
@@ -64,9 +65,9 @@ public class Addresses implements java.io.Serializable {
 		this.addressId = addressId;
 	}
 
-	 /*
-	  * Annotation used and changes done to support Many to One mapping
-	  */
+	/*
+	 * Annotation used and changes done to support Many to One mapping
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
 	public Customer getCustomer() {

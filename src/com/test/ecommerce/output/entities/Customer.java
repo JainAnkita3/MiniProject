@@ -4,6 +4,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+
 // default package
 // Generated Mar 23, 2016 4:48:05 PM by Hibernate Tools 4.3.1.Final
 
@@ -12,7 +14,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,15 +31,19 @@ public class Customer implements java.io.Serializable {
 	private String firstName;
 	private String lastName;
 	private String password;
-	private String address;
 	private String email;
 	private Integer phNumber;
 
 	/*
-	 * For building One to Many relationship between Customer to Addresses, As
-	 * Customer can have many addresses
+	 * Building One-to-Many relationship with Addresses, Carddetails,
+	 * Orders
+	 * 
+	 * One-to-One with Cart
 	 */
-	private Set<Addresses> customerAddresses;
+	private Set<Addresses> addresses;
+	private Set<Carddetails> carddetails;
+	private Set<Orders> orders;
+	private Cart cart;
 
 	public Customer() {
 	}
@@ -46,12 +54,10 @@ public class Customer implements java.io.Serializable {
 		this.email = email;
 	}
 
-	public Customer(String firstName, String lastName, String password, String address, String email,
-			Integer phNumber) {
+	public Customer(String firstName, String lastName, String password, String email, Integer phNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
-		this.address = address;
 		this.email = email;
 		this.phNumber = phNumber;
 	}
@@ -94,16 +100,7 @@ public class Customer implements java.io.Serializable {
 		this.password = password;
 	}
 
-	@Column(name = "ADDRESS", length = 20)
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	@Column(name = "EMAIL", nullable = false, length = 55)
+	@Column(name = "EMAIL", unique = true, nullable = false, length = 55)
 	public String getEmail() {
 		return this.email;
 	}
@@ -122,15 +119,45 @@ public class Customer implements java.io.Serializable {
 	}
 
 	/*
-	 * Annotation used and changes done to support One to Many mapping
+	 * Added to support One to Many mapping
 	 */
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
 	public Set<Addresses> getAddresses() {
-		return this.customerAddresses;
+		return this.addresses;
 	}
 
 	public void setAddresses(Set<Addresses> addresses) {
-		this.customerAddresses = addresses;
+		this.addresses = addresses;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+	public Set<Carddetails> getCardDetails() {
+		return this.carddetails;
+	}
+
+	public void setCardDetails(Set<Carddetails> carddetails) {
+		this.carddetails = carddetails;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+	public Set<Orders> getOrders() {
+		return this.orders;
+	}
+
+	public void setOrders(Set<Orders> orders) {
+		this.orders = orders;
+	}
+
+	/*
+	 * Added to support One to One mapping with Cart
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CUSTOMER_ID")
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 }

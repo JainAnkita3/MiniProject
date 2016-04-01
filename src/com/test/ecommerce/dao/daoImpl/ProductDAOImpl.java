@@ -9,7 +9,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
-import com.test.ecommerce.constants.EcommerceConstants;
 import com.test.ecommerce.dao.daoInterfaces.ProductDAOInterface;
 import com.test.ecommerce.output.entities.Product;
 import com.test.ecommerce.util.EcommerceUtil;
