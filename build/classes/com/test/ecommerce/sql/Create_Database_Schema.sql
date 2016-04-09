@@ -1,3 +1,40 @@
+-- Mapping Details  :
+
+--                                      1:n
+-- Customer (One-To-Many) --------------------------------->  Addresses
+--                             Have multiple address
+
+
+--                                      1:1
+-- Customer (One-To-One)  --------------------------------->  Cart
+--                             Have Cart Access
+           
+
+--                                      1:n
+-- Customer (One-To-Many)  --------------------------------->  Orders
+--                             See multiple Orders(History)
+
+
+--                                      1:n
+-- Customer (One-To-Many)  --------------------------------->  Card Details
+--                             Have Credit Cards
+
+
+--                                      1:n
+-- Cart (One-To-Many)      --------------------------------->  Card Details
+--                             Have Payement options
+
+
+--                                      1:1
+-- Cart (One-To-One)       --------------------------------->  Orders
+--                             For History and status
+
+
+--                                      1:1
+-- Cart (One-To-One)       --------------------------------->  Product
+--                             Have Product Id & Price
+
+
 CREATE TABLE IF NOT EXISTS PRODUCT (
         PRODUCT_ID               INT NOT NULL AUTO_INCREMENT UNIQUE,
         PRODUCT_NAME             VARCHAR(20) NOT NULL UNIQUE,

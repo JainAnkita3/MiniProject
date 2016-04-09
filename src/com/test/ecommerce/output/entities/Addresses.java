@@ -45,9 +45,8 @@ public class Addresses implements java.io.Serializable {
 		this.customer = customer;
 	}
 
-	public Addresses(Customer customer, int addressId, String streetName, String city, String apt, String addressType) {
+	public Addresses(Customer customer, String streetName, String city, String apt, String addressType) {
 		this.customer = customer;
-		this.addressId = addressId;
 		this.streetName = streetName;
 		this.city = city;
 		this.apt = apt;

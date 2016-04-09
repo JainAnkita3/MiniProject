@@ -14,5 +14,7 @@ public class EcommerceConstants {
 
 	public static final File CFGFILE = new File(
 			"/Users/rinkeshshah/Documents/Ankee/workspace/MiniProject/src/com/test/ecommerce/resources/hibernate.cfg.xml");
+	
+	public static final String RECORD_INSERTED_SUCCESSFULLY = "Record Inserted successfully....";
 
 }

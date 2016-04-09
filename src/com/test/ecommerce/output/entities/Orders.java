@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,14 +30,13 @@ public class Orders implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Customer customer;
-	private Date orderDate;
+	private Date orderDate = new Date();
 	private String quantityOrdered;
 	private BigDecimal CProdPrice;
 	private BigDecimal totalAmount;
 	private String status;
 	private String trackingNum;
 	private int orderedCartId;
-	private Cart orderId;
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -52,7 +50,7 @@ public class Orders implements java.io.Serializable {
 	}
 
 	/*
-	 * Changes Done for One to One mapping for Primary Key OrderId
+	 * Adding One to One mapping with Cart
 	 */
 	private Cart cart;
 
@@ -67,8 +65,7 @@ public class Orders implements java.io.Serializable {
 	}
 
 	/*
-	 * Annotation used and changes done to support Many-to-One mapping with
-	 * Customer
+	 * Adding Many-to-One mapping with Customer
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
@@ -141,20 +138,19 @@ public class Orders implements java.io.Serializable {
 	/*
 	 * Modified Constructors to support mapping
 	 */
-	public Orders(Cart orderId, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
-			BigDecimal totalAmount, int orderedCartId) {
-		this.orderId = orderId;
+	public Orders(Cart cart, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
+			BigDecimal totalAmount) {
+		this.cart = cart;
 		this.customer = customer;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
 		this.CProdPrice = CProdPrice;
 		this.totalAmount = totalAmount;
-		this.orderedCartId = orderedCartId;
 	}
 
-	public Orders(Cart orderId, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
-			BigDecimal totalAmount, String status, String trackingNum, int orderedCartId) {
-		this.orderId = orderId;
+	public Orders(Cart cart, Customer customer, Date orderDate, String quantityOrdered, BigDecimal CProdPrice,
+			BigDecimal totalAmount, String status, String trackingNum) {
+		this.cart = cart;
 		this.customer = customer;
 		this.orderDate = orderDate;
 		this.quantityOrdered = quantityOrdered;
@@ -162,7 +158,6 @@ public class Orders implements java.io.Serializable {
 		this.totalAmount = totalAmount;
 		this.status = status;
 		this.trackingNum = trackingNum;
-		this.orderedCartId = orderedCartId;
 	}
 
 }

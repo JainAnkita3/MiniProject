@@ -39,8 +39,7 @@ public class Carddetails implements java.io.Serializable {
 	/*
 	 * Modified Constructors to support mapping
 	 */
-	public Carddetails(String cardNumber, Customer customer, Date cardExpiryDtm, String cardType, BigDecimal amount,
-			Cart cart) {
+	public Carddetails(Customer customer, Cart cart, String cardNumber, String pin, Date cardExpiryDtm, String cardType, BigDecimal amount) {
 		this.cardNumber = cardNumber;
 		this.customer = customer;
 		this.cardExpiryDtm = cardExpiryDtm;
@@ -49,8 +48,8 @@ public class Carddetails implements java.io.Serializable {
 		this.cart = cart;
 	}
 
-	public Carddetails(String cardNumber, Customer customer, String pin, Date cardExpiryDtm, String cardType,
-			String bankName, BigDecimal amount, Cart cart) {
+	public Carddetails(Customer customer, Cart cart, String cardNumber, String pin, Date cardExpiryDtm, String cardType,
+			String bankName, BigDecimal amount) {
 		this.cardNumber = cardNumber;
 		this.customer = customer;
 		this.pin = pin;
@@ -75,7 +74,7 @@ public class Carddetails implements java.io.Serializable {
 	 * Added to Support Many-to-One mapping with Cart
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ORDER_ID", nullable = false)
+	@JoinColumn(name = "ORDER_ID")
 	public Cart getCart() {
 		return this.cart;
 	}
@@ -88,7 +87,7 @@ public class Carddetails implements java.io.Serializable {
 	 * Added to Support Many-to-One mapping with Customer
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CUSTOMER_ID", nullable = false)
+	@JoinColumn(name = "CUSTOMER_ID")
 	public Customer getCustomer() {
 		return this.customer;
 	}

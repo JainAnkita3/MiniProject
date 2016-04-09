@@ -19,34 +19,26 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 
 	private List<Integer> idList = new ArrayList<>();
 	private List<Integer> itemId = new ArrayList<Integer>();
-	private Product item = new Product();
+	private Product item;
 
 	public ProductDAOImpl() {
 		System.out.println("ProductDAOImpl Construtor");
+		logger.info("ProductDAO");
+
 	}
 
 	/**
 	 * This method invokes setProductDetails and then saves the records in
 	 * Product table
 	 */
-	public void addProduct() {
-
-		try {
-
-			item = setProductDetails("Milk", "HEB", "3.99", "50");
-			// setProductDetails("Water", "HEB", "2.99", "70");
-			// setProductDetails("Sugar", "", "5.99", "20");
-			// setProductDetails("Tea", "", "4.99", "30");
-			getSession().save(item);
-			System.out.println("Records Inserted successfully : " + item.getProductId());
-		} catch (HibernateException e) {
-			logger.error("Caught Exception" + e);
-			txnRollback();
-			e.printStackTrace();
-		} finally {
-			closeSession();
-		}
-
+	public Product addProduct(String prodNm, String mfg, String sp, String stock) {
+		item = new Product();
+		System.out.println(" Adding Items in Product Table");
+		item.setProductName(prodNm);
+		item.setManufacturer(mfg);
+		item.setSellingPrice(new BigDecimal(sp));
+		item.setStock(stock);
+		return item;
 	}
 
 	/**
@@ -122,24 +114,4 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 
 	}
 
-	/**
-	 * This method sets the data in Product table
-	 * 
-	 * @param ProdName
-	 * @param Mfg
-	 * @param SellingPrice
-	 * @param Stock
-	 * @return
-	 */
-	private Product setProductDetails(String ProdName, String Mfg, String SellingPrice, String Stock) {
-
-		System.out.println(" Adding Items in Product Table");
-
-		item.setProductName(ProdName);
-		item.setManufacturer(Mfg);
-		item.setSellingPrice(new BigDecimal(SellingPrice));
-		item.setStock(Stock);
-		return item;
-
-	}
 }
