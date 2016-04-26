@@ -2,17 +2,22 @@ package com.test.ecommerce.services;
 
 import static com.test.ecommerce.constants.EcommerceConstants.RECORD_INSERTED_SUCCESSFULLY;
 import static com.test.ecommerce.constants.EcommerceConstants.SESSION;
+import static com.test.ecommerce.constants.EcommerceConstants.TRANSACTION;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.Month;
-import java.time.YearMonth;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.test.ecommerce.dao.daoImpl.AddressDAOImpl;
+import com.test.ecommerce.dao.daoImpl.CarddetailsDAOImpl;
 import com.test.ecommerce.dao.daoImpl.CartDAOImpl;
+import com.test.ecommerce.dao.daoImpl.CustomerDAOImpl;
+import com.test.ecommerce.dao.daoImpl.OrdersDAOImpl;
 import com.test.ecommerce.dao.daoImpl.ProductDAOImpl;
 import com.test.ecommerce.output.entities.Addresses;
 import com.test.ecommerce.output.entities.Carddetails;
@@ -24,120 +29,126 @@ import com.test.ecommerce.util.EcommerceUtil;
 
 public class ServiceImpl extends EcommerceUtil {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException, ClassNotFoundException, ParseException {
 
 		final Logger logger = Logger.getLogger(ServiceImpl.class);
 
 		System.out.println(logger.isInfoEnabled());
 		logger.info("AJ");
 
-		Product product1 ;
-		Product product2 ;
-		Product product3 ;
-		Product product4 ;
-		Product product5 = new Product();
-		Product product6 = new Product();
+		final int prodId;
+		final String productName = "Salt";
+		final String quantityOrdered;
+		final String cardNumber;
+		BigDecimal totalAmount = new BigDecimal("0.00");
+		final BigDecimal cartPP1;
+		final BigDecimal cartPP2;
+		final Product product1;
+		final Product product2;
+		final Product product3;
+		final Product product4;
+		final Customer customer1;
+		final Customer customer2;
+		final Customer customer3;
+		final Addresses address1;
+		final Addresses address2;
+		final Addresses address3;
+		final Addresses address4;
+		final Orders order1;
+		final Orders order2;
+		final Cart cart1;
+		final Cart cart2;
+		Carddetails carddetails = new Carddetails();
+		DateFormat formatter = new SimpleDateFormat("mm/dd/yy");
+		Date expiryDate = formatter.parse("12/12/21");
 
-		Customer customer = new Customer("aja", "", "ajain@gmail");
-		Addresses address1 = new Addresses(customer, "HuntLane", "SA", "13201", "BILLING");
-		Addresses address2 = new Addresses(customer, "Eckhert", "SA", "15200", "BILLING");
-		Addresses address3 = new Addresses(customer, "Alamo", "SA", "14205", "BILLING");
-		Addresses address4 = new Addresses(customer, "Huebner", "SA", "12207", "BILLING");
-
-		Set<Addresses> addrsSet = new HashSet<Addresses>();
-		addrsSet.add(address1);
-		addrsSet.add(address2);
-		addrsSet.add(address3);
-		addrsSet.add(address4);
-		customer.setAddresses(addrsSet);
-
-		product5 = new Product("Milk", new BigDecimal("3.99"), "50");
-		product6 = new Product("Water", new BigDecimal("2.99"), "50");
-
-		CartDAOImpl cartDao = new CartDAOImpl();
-		BigDecimal totalCartProdPrice1 = cartDao.getCartProdTotalPrice(product5.getSellingPrice(), "2");
-		System.out.println("fjh : " + totalCartProdPrice1);
-
-		// TODO Future use for total amount payable by customer to put in Cart
-		// BigDecimal totalCartProdPrice;
-		Cart cart = new Cart(customer, product5, "1", totalCartProdPrice1, totalCartProdPrice1);
-		// TODO need to add multiple Products with same Cart Id
-		cart = new Cart(customer, product6, "5", totalCartProdPrice1, totalCartProdPrice1);
-
-		cart.setCustomer(customer);
-		customer.setCart(cart);
-
-		// TODO Orders should have HashSet<ProductID, Quantity> from Cart
-		Orders custOrder = new Orders(cart, customer, new java.util.Date(), "2", totalCartProdPrice1,
-				totalCartProdPrice1);
-		custOrder.setCart(cart);
-		custOrder.setCustomer(customer);
-
-		Date creditCardExpiry = Date.valueOf("2019-06-01");
-		// Carddetails cardDetails = new Carddetails(customer, cart,
-		// "123456789123", "1234", creditCardExpiry, "Credit", new
-		// BigDecimal("90.99"));
-		Carddetails cardDetails = new Carddetails();
-		cardDetails.setCustomer(customer);
-		cardDetails.setCart(cart);
-		cardDetails.setCardNumber("1234-1234-1233-4536");
-		cardDetails.setPin("1234");
-		cardDetails.setCardExpiryDtm(creditCardExpiry);
-		cardDetails.setCardType("credit");
-		cardDetails.setAmount(new BigDecimal("90.99"));
-
-		Set<Carddetails> cardSet = new HashSet<Carddetails>();
-		cardSet.add(cardDetails);
-		customer.setCardDetails(cardSet);
-
-		cart.setCarddetails(cardSet);
+		ProductDAOImpl productDAOImpl = new ProductDAOImpl();
+		CustomerDAOImpl customerDAOImpl = new CustomerDAOImpl();
+		AddressDAOImpl addressDAOImpl = new AddressDAOImpl();
+		CartDAOImpl cartDAOImpl = new CartDAOImpl();
+		OrdersDAOImpl orderDAOImpl = new OrdersDAOImpl();
+		CarddetailsDAOImpl carddetailsDAOImpl = new CarddetailsDAOImpl();
 
 		// Creating Session.
 		SESSION = getSession();
-
-		/*SESSION.saveOrUpdate(customer);
-		SESSION.saveOrUpdate(cardDetails);
-
-		
-		 SESSION.saveOrUpdate(customer);
-		 SESSION.saveOrUpdate(address1);
-		 SESSION.saveOrUpdate(address2); 
-		 SESSION.saveOrUpdate(address3);
-		 SESSION.saveOrUpdate(address4); 
-		//SESSION.saveOrUpdate(product1);
-		 SESSION.saveOrUpdate(cart); 
-		 SESSION.saveOrUpdate(custOrder);
-		 SESSION.saveOrUpdate(cardDetails);*/
-		 
-
-
-		ProductDAOImpl productDAOImpl = new ProductDAOImpl();
+		TRANSACTION = createTransaction(SESSION);
 
 		product1 = productDAOImpl.addProduct("Spice", "HEB", "2.99", "70");
-		product2 = productDAOImpl.addProduct("Salt", "HEB", "2.99", "70");
+		product2 = productDAOImpl.addProduct("Salt", "HEB", "3.99", "70");
 		product3 = productDAOImpl.addProduct("Sugar", "GV", "5.99", "20");
 		product4 = productDAOImpl.addProduct("Tea2", "RedLable", "4.99", "30");
 
-		//try{ -- Use this for exception handling
-		/*SESSION.saveOrUpdate(product1);
-		SESSION.saveOrUpdate(product2);
-		SESSION.saveOrUpdate(product3);
-		SESSION.saveOrUpdate(product4);
-		System.out.println(RECORD_INSERTED_SUCCESSFULLY);*/
-		//}catch(){
-			
-		//}
-		
+		customer1 = customerDAOImpl.addCustomer("ank", "jain", "1234", "jain.ank@gmail.com", 123456789);
+		customer2 = customerDAOImpl.addCustomer("tina", "shah", "1234", "shah.tina@gmail.com", 223456789);
+		customer3 = customerDAOImpl.addCustomer("mina", "morya", "1234", "morya.mina@gmail.com", 323456789);
+
+		address1 = addressDAOImpl.addAddress(customer1, "Hunt ln", "SA", "1111", "RESI");
+		address2 = addressDAOImpl.addAddress(customer1, "De zavala ln", "SA", "1221", "BUSSINESS");
+		address3 = addressDAOImpl.addAddress(customer2, "Hubner ln", "HOU", "3111", "resi");
+		address4 = addressDAOImpl.addAddress(customer3, "whitby ln", "DALLAS", "2111", "RESI");
+
+		quantityOrdered = "3";
+		totalAmount = getTotalAmount(new BigDecimal("0.00"), totalAmount);
+		cartPP1 = cartDAOImpl.getTotalCartProdPrice(product1, quantityOrdered);
+		cartPP2 = cartDAOImpl.getTotalCartProdPrice(product2, quantityOrdered);
+		cart1 = cartDAOImpl.addCart(customer1, product1, quantityOrdered, cartPP1,
+				getTotalAmount(cartPP1, totalAmount));
+		cart2 = cartDAOImpl.addCart(customer1, product2, quantityOrdered, cartPP2,
+				getTotalAmount(cartPP2, totalAmount));
+
+		order1 = orderDAOImpl.addOrders(cart1, customer1, new java.util.Date(), quantityOrdered, cartPP1,
+				getTotalAmount(cartPP1, totalAmount), "SHIPPED", "AIRWY123");
+		order2 = orderDAOImpl.addOrders(cart2, customer1, new java.util.Date(), quantityOrdered, cartPP2,
+				getTotalAmount(cartPP2, totalAmount), "SHIPPED", "AIRWY123");
+		cardNumber = "7242-1234-1234-1234";
+		carddetails = carddetailsDAOImpl.addCardInfo(customer1, cart1, cardNumber, "1234", expiryDate, "Visa", "Chase",
+				totalAmount);
+		try {
+			SESSION.save(customer1);
+			SESSION.save(customer2);
+			SESSION.save(customer3);
+			SESSION.save(customer1);
+
+			SESSION.save(address1);
+			SESSION.save(address2);
+			SESSION.save(address3);
+			SESSION.save(address4);
+
+			SESSION.save(product1);
+			SESSION.save(product2);
+			SESSION.save(product3);
+			SESSION.save(product4);
+
+			SESSION.save(cart1);
+			SESSION.save(cart2);
+
+			SESSION.save(order1);
+			SESSION.save(order2);
+
+			if (carddetailsDAOImpl.isValidCardNumber(cardNumber)) {
+				SESSION.save(carddetails);
+			}
+			System.out.println(RECORD_INSERTED_SUCCESSFULLY);
+		} catch (Exception e) {
+			System.out.println("Exception occured, records found already");
+			e.printStackTrace();
+		}
+
+		prodId = productDAOImpl.doSqlQuery(productName, SESSION);
+		System.out.println("prodID : " + prodId);
+		productDAOImpl.getProductFromProdId(SESSION, prodId);
+		productDAOImpl.getAllProducts(SESSION);
+
+		productDAOImpl.updateProductSP(prodId, (new BigDecimal("7.99")), SESSION);
+		// productDAOImpl.deleteProduct(prodId, SESSION);
+
 		// Txn commit & Closing session
-		//closeSession();
+		closeSession();
+	}
 
-
-		// Orders order = new Orders(101, 1001, new java.util.Date(), "5", new
-		// BigDecimal("2.99"), new BigDecimal("14.95"),
-		// "PROCESS", "AIRWY111");
-
-		// Cart cart = new Cart();
-
+	public static BigDecimal getTotalAmount(BigDecimal cartPP, BigDecimal totalAmount) {
+		totalAmount = cartPP.add(totalAmount);
+		return totalAmount;
 	}
 
 }

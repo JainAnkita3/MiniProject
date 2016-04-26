@@ -36,7 +36,7 @@ public class EcommerceUtil {
 				System.err.println("Session creation failed." + e);
 				e.printStackTrace();
 			}
-			//System.out.println("Session created successfully");
+			// System.out.println("Session created successfully");
 
 		}
 
@@ -88,6 +88,7 @@ public class EcommerceUtil {
 	 */
 	public static Transaction createTransaction(Session session) {
 		TRANSACTION = session.beginTransaction();
+		TRANSACTION.begin();
 		System.out.println("Txn created successfully");
 		return TRANSACTION;
 
@@ -98,7 +99,7 @@ public class EcommerceUtil {
 	 * open.
 	 */
 	public static void closeSession() {
-		System.out.println("**** Closing Session ****");
+		System.out.println("**** Closing Transaction & Session ****");
 		if (TRANSACTION != null) {
 			TRANSACTION.commit();
 		}
