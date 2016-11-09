@@ -32,6 +32,7 @@ public class EcommerceUtil {
 			try {
 				SESSIONFACTORY = new Configuration().configure(CFGFILE).buildSessionFactory();
 				SESSION = createSession(SESSIONFACTORY);
+				SESSION.flush();
 			} catch (Exception e) {
 				System.err.println("Session creation failed." + e);
 				e.printStackTrace();
@@ -104,6 +105,7 @@ public class EcommerceUtil {
 			TRANSACTION.commit();
 		}
 		if (SESSION.isOpen()) {
+			SESSION.flush();
 			SESSION.close();
 		}
 	}

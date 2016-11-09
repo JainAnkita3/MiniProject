@@ -4,6 +4,8 @@
 		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory>
+		<!--  For increment, sequence etc generators to work -->
+		<!-- property name="hibernate.hbm2ddl.auto">update</property-->
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.password">welcome</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/Ankita</property>

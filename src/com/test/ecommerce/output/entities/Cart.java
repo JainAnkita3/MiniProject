@@ -89,7 +89,7 @@ public class Cart implements java.io.Serializable {
 	}
 
 	/*
-	 * Added to Support One to One mapping with Customer
+	 * Added to Support One to One mapping with Product
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "Product_ID", nullable = false)

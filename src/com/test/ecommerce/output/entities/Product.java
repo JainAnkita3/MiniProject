@@ -54,7 +54,6 @@ public class Product implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "PRODUCT_ID", unique = true, nullable = false)
 	public Integer getProductId() {
 		return this.productId;
@@ -105,9 +104,16 @@ public class Product implements java.io.Serializable {
 	 * Added to support Many-to-One with Cart
 	 */
 	/*
-	 * @ManyToOne(fetch=FetchType.LAZY) public Cart getCart() { return cart; }
+	 * @ManyToOne(fetch=FetchType.LAZY) 
+	 * public Cart getCart() 
+	 * { 
+	 * return cart; 
+	 * }
 	 * 
-	 * public void setCart(Cart cart) { this.cart = cart; }
+	 * public void setCart(Cart cart) 
+	 * { 
+	 * this.cart = cart; 
+	 * }
 	 */
 
 	//TODO need to verify if we really do need this?

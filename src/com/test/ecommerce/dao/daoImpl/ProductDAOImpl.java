@@ -36,7 +36,7 @@ public class ProductDAOImpl extends EcommerceUtil implements ProductDAOInterface
 		item.setManufacturer(mfg);
 		item.setSellingPrice(new BigDecimal(sp));
 		item.setStock(stock);
-		System.out.println(RECORD_INSERTED_SUCCESSFULLY);
+		System.out.println(RECORD_INSERTED_SUCCESSFULLY + getClass().getName().substring(31));
 		return item;
 	}
 

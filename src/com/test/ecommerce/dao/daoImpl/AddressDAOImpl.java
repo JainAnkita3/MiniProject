@@ -26,13 +26,13 @@ public class AddressDAOImpl extends EcommerceUtil implements AddressesDAOInterfa
 	@Override
 	public Addresses addAddress(Customer customerId, String streetNm, String city, String apt, String addressType) {
 		addresses = new Addresses();
-		System.out.println(ADDING_RECORDS_IN_TABLE);
+		System.out.println(ADDING_RECORDS_IN_TABLE + getClass().getName());
 		addresses.setCustomer(customerId);
 		addresses.setStreetName(streetNm);
 		addresses.setCity(city);
 		addresses.setApt(apt);
 		addresses.setAddressType(addressType.toUpperCase());
-		System.out.println(RECORD_INSERTED_SUCCESSFULLY);
+		System.out.println(RECORD_INSERTED_SUCCESSFULLY + getClass().getName().substring(31));
 		return addresses;
 	}
 

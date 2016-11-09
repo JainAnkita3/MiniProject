@@ -2,9 +2,6 @@ package com.test.ecommerce.output.entities;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-// default package
-// Generated Mar 23, 2016 4:48:05 PM by Hibernate Tools 4.3.1.Final
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

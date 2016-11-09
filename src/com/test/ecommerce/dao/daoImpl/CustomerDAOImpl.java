@@ -34,7 +34,7 @@ public class CustomerDAOImpl extends EcommerceUtil implements CustomerDAOInterfa
 		customer.setPassword(pwd);
 		customer.setEmail(email);
 		customer.setPhNumber(phNo);
-		System.out.println(RECORD_INSERTED_SUCCESSFULLY);
+		System.out.println(RECORD_INSERTED_SUCCESSFULLY + getClass().getName().substring(31));
 		return customer;
 	}
 
